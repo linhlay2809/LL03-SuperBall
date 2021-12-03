@@ -1,13 +1,15 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private TargetManager targetManager;
-    [SerializeField] private GameObject target;
-    [SerializeField] private float _speed;
-    [SerializeField] private bool _isActiveBall = false;
+    [SerializeField] protected TargetManager targetManager;
+    [SerializeField] protected GameObject target;
+    [SerializeField] protected GameObject triggerEffect;
+    [SerializeField] protected GameObject deathEffect;
+    [SerializeField] protected float _speed;
+    [SerializeField] protected bool _isActiveBall = false;
 
     private void Awake()
     {
@@ -20,28 +22,47 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (GameManager.Instance.IsGameOver == false)
         {
-            _isActiveBall = true;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _isActiveBall = true;
+            }
+            if (_isActiveBall)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
+                if (transform.position == target.transform.position)
+                {
+                    _isActiveBall = false;
+                    AfterTriggerTarget();
+                }
+            }
         }
-        if (_isActiveBall)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
-        }
-            
+
     }
-    private void OnTriggerEnter2D(Collider2D col)
+    // Kích hoạt khi player cùng vị trí với target
+    void AfterTriggerTarget()
     {
-        if (col.CompareTag("Target"))
-        {
-            _isActiveBall = false;
-            targetManager.SpawnNewTarget();
-            targetManager.AddTargetToDestroyList();
-            SetTarget(0);
-        }
+        SpawnEffect();
+        targetManager.SpawnNewTarget();
+        targetManager.AddTargetToDestroyList();
+        SetTarget(0);
     }
+    // code gán new target
     void SetTarget(int newTarget)
     {
         target = targetManager.GetTarget(newTarget);
+    }
+    // Spawn VFX khi trigger point mới
+    void SpawnEffect()
+    {
+        GameObject triggerEff = Instantiate(triggerEffect, target.transform.position, triggerEffect.transform.rotation);
+        Destroy(triggerEff, 1);
+    }
+    public void SetGameOver()
+    {
+        GameObject deathEff = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
+        Destroy(deathEff, 1);
+        Destroy(gameObject);
     }
 }

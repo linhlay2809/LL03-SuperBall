@@ -6,7 +6,7 @@ public class TargetManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> targetList;
     [SerializeField] private List<GameObject> targetToDestroyList;
-    [SerializeField] private GameObject targetPrefab;
+    [SerializeField] private GameObject[] targetPrefab;
     [SerializeField] private float _minX;
     [SerializeField] private float _maxX;
     [SerializeField] private float _minY;
@@ -29,7 +29,7 @@ public class TargetManager : MonoBehaviour
     }
     public void SpawnNewTarget()
     {
-        var newTarget = Instantiate(targetPrefab, SpawnRandomPos(), targetPrefab.transform.rotation);
+        var newTarget = Instantiate(targetPrefab[RandomTarget()], SpawnRandomPos(), targetPrefab[RandomTarget()].transform.rotation);
         newTarget.transform.parent = targetParent.transform;
         targetList.Add(newTarget);
     }
@@ -40,5 +40,9 @@ public class TargetManager : MonoBehaviour
     public GameObject GetTarget(int targetIndex)
     {
         return targetList[targetIndex];
+    }
+    int RandomTarget()
+    {
+        return Random.Range(0, targetPrefab.Length);
     }
 }

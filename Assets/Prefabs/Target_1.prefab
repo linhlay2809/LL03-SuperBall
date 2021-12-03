@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8551760292996400930}
   - component: {fileID: 4550989166958968694}
   - component: {fileID: 1778054751630180608}
-  - component: {fileID: -3558840855693537589}
+  - component: {fileID: 2011647431230554185}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Target_1
   m_TagString: Target
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -99,8 +99,8 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.02
---- !u!114 &-3558840855693537589
+  m_Radius: 0.49999997
+--- !u!114 &2011647431230554185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

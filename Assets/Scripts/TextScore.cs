@@ -20,7 +20,7 @@ public class TextScore : MonoBehaviour
 
     private void AddScore(int score)
     {
-        textScore.text = "Score: " + score;
+        textScore.text = score.ToString();
     }
 
    
