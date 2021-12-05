@@ -29,7 +29,7 @@ public class TargetManager : MonoBehaviour
     }
     public void SpawnNewTarget()
     {
-        var newTarget = Instantiate(targetPrefab[RandomTarget()], SpawnRandomPos(), targetPrefab[RandomTarget()].transform.rotation);
+        var newTarget = Instantiate(targetPrefab[RandomTarget()], SpawnRandomPos(), Quaternion.Euler(0,0,Random.Range(0,360)));
         newTarget.transform.parent = targetParent.transform;
         targetList.Add(newTarget);
     }
