@@ -264,10 +264,9 @@ MonoBehaviour:
   - {fileID: 1925327950724970373, guid: 644b699f30ceb874b80e3df541c14d2d, type: 3}
   - {fileID: 4921706001983895106, guid: fd8d657606f848f4cb02602f6a9ec185, type: 3}
   - {fileID: 337511452842175510, guid: 5c97c6107a07e3d4ba771114e4d56bb2, type: 3}
-  _minX: -2
-  _maxX: 2
-  _minY: 2.7
-  _maxY: 6.7
+  boundX: {x: -2, y: 2}
+  boundY: {x: 2.7, y: 6.7}
+  scoreToNextLevel: 050000000f000000
 --- !u!4 &420890974
 Transform:
   m_ObjectHideFlags: 0
