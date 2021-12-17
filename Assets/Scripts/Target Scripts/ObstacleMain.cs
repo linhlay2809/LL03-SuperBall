@@ -11,13 +11,14 @@ public class ObstacleMain : MonoBehaviour
     void Start()
     {
         parent = gameObject.transform.parent.gameObject;
-        speed = Random.Range(minMaxSpeed.x, minMaxSpeed.y);
+        speed = Random.Range(minMaxSpeed.x, minMaxSpeed.y); // Random speed cho Obstacle con
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
             GameManager.Instance.IsGameOver = true;
+            GameManager.Instance.GameOver();
             col.GetComponent<Player>().SetGameOver();
             UIManager.Instance.GameOver();
         }

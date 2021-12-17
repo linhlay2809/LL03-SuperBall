@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Target
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7546559490993708209
 Transform:
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e277613dd57391d4a88207e8bf5ca059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 1
+  score: 3
 --- !u!1 &4384289466351881467
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4384289466351881466
 Transform:

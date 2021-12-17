@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,12 +15,12 @@ public class TextScore : MonoBehaviour
     private void Start()
     {
         AddScore(0);
-        GameManager.Instance.updateScore.AddListener(AddScore);
+        GameManager.Instance.updateScore.AddListener(AddScore); // Lắng nghe event updateScore
     }
 
     private void AddScore(int score)
     {
-        textScore.text = score.ToString();
+        textScore.text = score.ToString(); // Cập nhật score lên UI
     }
 
    

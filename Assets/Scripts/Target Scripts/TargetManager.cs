@@ -10,13 +10,14 @@ public class TargetManager : MonoBehaviour
     [SerializeField] protected Vector2 boundX;
     [SerializeField] protected Vector2 boundY;
     [SerializeField] protected List<int> scoreToNextLevel = new List<int>();
-    protected int level = 0;
+    [SerializeField] protected int level = 0;
     protected GameObject targetParent;
 
     private void Awake()
     {
         targetParent = GameObject.Find("TargetList");
     }
+    // Add target đã trigger vào destroyList
     public void AddTargetToDestroyList()
     {
         targetToDestroyList.Add(targetList[0]);
@@ -39,7 +40,7 @@ public class TargetManager : MonoBehaviour
     {
         return new Vector3(Random.Range(boundX.x, boundX.y), Random.Range(boundY.x, boundY.y) + targetList[targetList.Count - 1].transform.position.y, 0);
     }
-    // Get gameobject mực tiêu
+    // Get gameobject mục tiêu
     public GameObject GetTarget(int targetIndex)
     {
         return targetList[targetIndex];

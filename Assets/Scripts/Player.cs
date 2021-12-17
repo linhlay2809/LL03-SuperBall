@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] protected float _speed;
     [SerializeField] protected bool _isActiveBall = false;
 
+
     private void Awake()
     {
         targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
@@ -24,12 +25,25 @@ public class Player : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver == false)
         {
+            // Nhận diện thao tác chạm trên dt
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began) // Khi bắt đầu chạm
+                {
+                    _isActiveBall = true;
+                }
+            }
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _isActiveBall = true;
             }
+#endif
+
             if (_isActiveBall)
             {
+                // Di chuyển player đến target
                 transform.position = Vector3.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
                 if (transform.position == target.transform.position)
                 {
