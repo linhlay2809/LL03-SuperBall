@@ -34,12 +34,10 @@ public class Player : MonoBehaviour
                     _isActiveBall = true;
                 }
             }
-#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _isActiveBall = true;
             }
-#endif
 
             if (_isActiveBall)
             {

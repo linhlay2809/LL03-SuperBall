@@ -35,12 +35,12 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
-#if UNITY_EDITOR //Active when play editor mode
+        //#if UNITY_EDITOR //Active when play editor mode
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.Instance.IsGameOver == true)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-#endif
+//#endif
     }
     public void GameOver()
     {

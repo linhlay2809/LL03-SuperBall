@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     private int currentScore = 0;
     protected bool _isGameOver = false;
 
-    protected AudioSource audio;
+    protected AudioSource audioS;
     [SerializeField] protected AudioClip triggerSound;
     [SerializeField] protected AudioClip gameOverSound;
     /// <summary>
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        audio = GetComponent<AudioSource>();
+        audioS = GetComponent<AudioSource>();
     }
     
     public void AddScore(int score)
@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
         this.currentScore += score;
         updateScore?.Invoke(this.currentScore); // gọi sự kiện updateScore khi được gọi
         UIManager.Instance.SetScoreAnim();
-        if (audio != null)
-            audio.PlayOneShot(triggerSound);
+        if (audioS != null)
+            audioS.PlayOneShot(triggerSound);
     }
     // Lấy giá trị score
     public int GetScore()
@@ -45,6 +45,6 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        audio.PlayOneShot(gameOverSound);
+        audioS.PlayOneShot(gameOverSound);
     }
 }
