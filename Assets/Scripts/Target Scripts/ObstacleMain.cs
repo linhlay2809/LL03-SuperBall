@@ -19,7 +19,7 @@ public class ObstacleMain : MonoBehaviour
         {
             GameManager.Instance.IsGameOver = true;
             GameManager.Instance.GameOver();
-            col.GetComponent<Player>().SetGameOver();
+            col.GetComponent<Player>().GameOver();
             UIManager.Instance.GameOver();
         }
     }

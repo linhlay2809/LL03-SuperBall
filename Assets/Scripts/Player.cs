@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] protected TargetManager targetManager;
     [SerializeField] protected GameObject target;
-    [SerializeField] protected GameObject triggerEffect;
+    [SerializeField] protected ParticleSystem triggerEffect;
     [SerializeField] protected GameObject deathEffect;
     [SerializeField] protected float _speed;
     [SerializeField] protected bool _isActiveBall = false;
@@ -55,23 +55,23 @@ public class Player : MonoBehaviour
     // Kích hoạt khi player cùng vị trí với target
     void AfterTriggerTarget()
     {
-        SpawnEffect();
+        PlayTriggerEffect();
         targetManager.SpawnNewTarget();
         targetManager.AddTargetToDestroyList();
         SetTarget(0);
     }
+
+    private void PlayTriggerEffect()
+    {
+        triggerEffect.Play();
+    }
+
     // code gán new target
     void SetTarget(int newTarget)
     {
         target = targetManager.GetTarget(newTarget);
     }
-    // Spawn VFX khi trigger point mới
-    void SpawnEffect()
-    {
-        GameObject triggerEff = Instantiate(triggerEffect, target.transform.position, triggerEffect.transform.rotation);
-        Destroy(triggerEff, 1);
-    }
-    public void SetGameOver()
+    public void GameOver()
     {
         GameObject deathEff = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
         Destroy(deathEff, 1);
