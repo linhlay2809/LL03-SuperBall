@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayFabLogin : MonoBehaviour
 {
@@ -87,25 +90,6 @@ public class PlayFabLogin : MonoBehaviour
             error => Debug.LogError(error.GenerateErrorReport()));
     }
     
-    string displayName;
-
-    private Task<string> GetDisplayName(string playfabId)
-    {
-        PlayFabClientAPI.GetPlayerProfile( new GetPlayerProfileRequest() {
-                PlayFabId = playfabId,
-                ProfileConstraints = new PlayerProfileViewConstraints() {
-                    ShowDisplayName = true
-                }
-            },
-            result =>
-            {
-                Debug.Log("The player's DisplayName profile data is: " + result.PlayerProfile.DisplayName);
-                displayName = result.PlayerProfile.DisplayName;
-            },
-            error => Debug.LogError(error.GenerateErrorReport()));
-        return Task.FromResult(displayName);
-    }
-
     void SendLeaderboard(int score)
     {
         var request = new UpdatePlayerStatisticsRequest()
@@ -176,5 +160,92 @@ public class PlayFabLogin : MonoBehaviour
             Password = "123456"
         };
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnError);
+    }
+
+    public void SavePlayerData()
+    {
+        var request = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+            {
+                { "Skin", "Red" }
+            }
+        };
+        PlayFabClientAPI.UpdateUserData(request, OnSavePlayerData, OnError);
+    }
+
+    public void GetPlayerData()
+    {
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), OnGetPlayerData, OnError);
+    }
+
+    private void OnGetPlayerData(GetUserDataResult obj)
+    {
+        if (obj.Data != null && obj.Data.ContainsKey("Skin"))
+        {
+            Debug.Log(obj.Data["Skin"].Value);
+        }
+    }
+
+    private void OnSavePlayerData(UpdateUserDataResult obj)
+    {
+        Debug.Log("Successful user data send");
+    }
+
+    public void GetVirtualCurrencies()
+    {
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), OnGetUserInventorySuccess, OnError);
+    }
+    
+    // public float secondLeft = 1;
+    // Tien te
+    private void OnGetUserInventorySuccess(GetUserInventoryResult obj)
+    {
+        Debug.Log("Coins: "+ obj.VirtualCurrency["CN"]);
+        Debug.Log("Diamonds: "+ obj.VirtualCurrency["DM"]);
+        // secondLeft = obj.VirtualCurrencyRechargeTimes["EN"].SecondsToRecharge;
+    }
+
+    // private void Update()
+    // {
+    //     secondLeft -= Time.deltaTime;
+    //     TimeSpan time = TimeSpan.FromSeconds(secondLeft);
+    //     text.text = time.ToString("mm':'ss");
+    //     if (secondLeft < 0)
+    //     {
+    //         GetVirtualCurrencies();
+    //     }
+    // }
+
+    public void BuyItem()
+    {
+        var request = new SubtractUserVirtualCurrencyRequest
+        {
+            VirtualCurrency = "CN",
+            Amount = 5
+        };
+        PlayFabClientAPI.SubtractUserVirtualCurrency(request, OnSubtractCoinsSuccess, OnError);
+    }
+
+    private void OnSubtractCoinsSuccess(ModifyUserVirtualCurrencyResult obj)
+    {
+        // Reload UI
+        GetVirtualCurrencies();
+    }
+
+    public void GrantVirtualCurrency()
+    {
+        var request = new AddUserVirtualCurrencyRequest
+        {
+            VirtualCurrency = "CN",
+            Amount = 5
+        };
+        PlayFabClientAPI.AddUserVirtualCurrency(request, OnAddCoinsSuccess, OnError);
+    }
+
+    private void OnAddCoinsSuccess(ModifyUserVirtualCurrencyResult obj)
+    {
+        // Reload UI
+        GetVirtualCurrencies();
     }
 }

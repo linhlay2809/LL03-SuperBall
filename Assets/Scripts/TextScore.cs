@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class TextScore : MonoBehaviour
 {
-    private Text textScore;
+    private TextMeshProUGUI textScore;
     private void Awake()
     {
-        textScore = GetComponent<Text>();
+        textScore = GetComponent<TextMeshProUGUI>();
     }
     private void Start()
     {

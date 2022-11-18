@@ -155,7 +155,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DefaultCompany.SuperBall
+    Android: com.LLStudio.SuperBall
     Standalone: com.LL-Studio.Super-Ball
   buildNumber:
     Standalone: 0
@@ -836,7 +836,13 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Collab: 0
+    Game Performance: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 1
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -850,11 +856,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: b8f67a3d-7d76-4f76-9e2f-2ba36e96e44d
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Super Ball
+  organizationId: unity_5cd79aee40aee99d4573
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
