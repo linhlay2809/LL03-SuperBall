@@ -10,6 +10,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Login")]
+    [SerializeField] private GameObject changeNamePnl;
+    [SerializeField] private TMP_InputField inputFieldName;
+    [SerializeField] private Button okBtn;
+    
+    [Header("Score")]
     [SerializeField] protected GameObject gameOverUI;
     [SerializeField] protected GameObject scoreUI;
     [SerializeField] protected TextMeshProUGUI scoreFinaltxt;
@@ -32,13 +38,22 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        PlayfabManager.Instance.Login(changeNamePnl);
+        okBtn.onClick.AddListener(() =>
+        {
+            ChangeName();
+        });
         StartCoroutine(SetHighScore());
         // Invoke("SetHighScore", 1f);
     }
-
+    private void ChangeName()
+    {
+        PlayfabManager.Instance.UpdateDisplayName(inputFieldName.text);
+        changeNamePnl.SetActive(false);
+    }
     private IEnumerator SetHighScore()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
             StatisticName = "Rank",

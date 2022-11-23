@@ -76,5 +76,6 @@ public class Player : MonoBehaviour
         GameObject deathEff = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
         Destroy(deathEff, 1);
         Destroy(gameObject);
+        AdsManager.Instance.ShowAd();
     }
 }

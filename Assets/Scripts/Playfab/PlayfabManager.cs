@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class PlayfabManager : MonoBehaviour
         instance = this;
     }
 
-    public void Login(GameObject changeNameUI)
+    public Task Login(GameObject changeNameUI)
     {
         PlayFabClientAPI.LoginWithCustomID( new LoginWithCustomIDRequest {
             CustomId = SystemInfo.deviceUniqueIdentifier,
@@ -44,14 +45,17 @@ public class PlayfabManager : MonoBehaviour
             {
                 changeNameUI.SetActive(false);
             }
+            Debug.Log("Login Success");
         }, error => Debug.LogError(error.GenerateErrorReport()));
+        return Task.CompletedTask;
     }
-    public void UpdateDisplayName(string name) {
+    public Task UpdateDisplayName(string name) {
         PlayFabClientAPI.UpdateUserTitleDisplayName( new UpdateUserTitleDisplayNameRequest {
             DisplayName = name
         }, result => {
             Debug.Log("The player's display name is now: " + result.DisplayName);
         }, error => Debug.LogError(error.GenerateErrorReport()));
+        return Task.CompletedTask;
     }
     
     public void SendLeaderboard(int score)
