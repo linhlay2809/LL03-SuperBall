@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -42,8 +43,9 @@ public class AdsManager : MonoBehaviour,IUnityAdsLoadListener, IUnityAdsShowList
     {
         Advertisement.Load(VIDEO_PLACEMENT, this);
     }
-    public void ShowAd()
+    public async Task ShowAd()
     {
+        await Task.Delay(1000);
         Advertisement.Show(VIDEO_PLACEMENT,this);
     }
     public void LoadRewardedAd()

@@ -10,12 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] protected GameObject deathEffect;
     [SerializeField] protected float _speed;
     [SerializeField] protected bool _isActiveBall = false;
-
-
-    private void Awake()
-    {
-        targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
-    }
+    
     private void Start()
     {
         SetTarget(0);
@@ -25,6 +20,12 @@ public class Player : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver == false)
         {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _isActiveBall = true;
+            }
+#else
             // Nhận diện thao tác chạm trên dt
             if (Input.touchCount > 0)
             {
@@ -34,10 +35,7 @@ public class Player : MonoBehaviour
                     _isActiveBall = true;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _isActiveBall = true;
-            }
+#endif       
 
             if (_isActiveBall)
             {
@@ -71,11 +69,11 @@ public class Player : MonoBehaviour
     {
         target = targetManager.GetTarget(newTarget);
     }
-    public void GameOver()
+    public async void GameOver()
     {
         GameObject deathEff = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
         Destroy(deathEff, 1);
         Destroy(gameObject);
-        AdsManager.Instance.ShowAd();
+        await AdsManager.Instance.ShowAd();
     }
 }

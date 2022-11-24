@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
@@ -22,38 +23,36 @@ public class UIManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI highScoretxt;
     [SerializeField] protected TextMeshProUGUI finalHighScoretxt;
     [SerializeField] protected Player player;
-    protected Animator anim;
+    private Animator anim;
     private int currentHighScore;
     /// <summary>
     /// Singleton
     /// </summary>
-    private static UIManager instance;
-    public static UIManager Instance => instance;
+    private static UIManager _instance;
+    public static UIManager Instance => _instance;
     private void Awake()
     {
-        instance = this;
+        _instance = this;
         player = GameObject.Find("Player").GetComponent<Player>();
         anim = GetComponent<Animator>();
     }
-
-    private void Start()
+    
+    private async void Start()
     {
-        PlayfabManager.Instance.Login(changeNamePnl);
-        okBtn.onClick.AddListener(() =>
-        {
-            ChangeName();
-        });
-        StartCoroutine(SetHighScore());
-        // Invoke("SetHighScore", 1f);
+        await PlayfabManager.Instance.Login(changeNamePnl);
+        okBtn.onClick.AddListener(ChangeName);
+        await SetHighScore();
     }
-    private void ChangeName()
+
+    private async void ChangeName()
     {
-        PlayfabManager.Instance.UpdateDisplayName(inputFieldName.text);
+        await PlayfabManager.Instance.UpdateDisplayName(inputFieldName.text);
         changeNamePnl.SetActive(false);
     }
-    private IEnumerator SetHighScore()
+    
+    private async Task SetHighScore()
     {
-        yield return new WaitForSeconds(1f);
+        await Task.Delay(1000);
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
             StatisticName = "Rank",
@@ -67,6 +66,7 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log(errorCallback.Error);
         });
+        await Task.Yield();
     }
     private void Update()
     {

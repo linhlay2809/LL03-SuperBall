@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        this._isGameOver = true;
         audioS.PlayOneShot(gameOverSound);
     }
 }

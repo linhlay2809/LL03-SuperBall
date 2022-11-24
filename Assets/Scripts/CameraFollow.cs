@@ -16,8 +16,10 @@ public class CameraFollow : MonoBehaviour
     {
         if (player != null)
         {
-            Vector3 newPos = new Vector3(0, player.transform.position.y + posY, transform.position.z);
-            transform.position = newPos;
+            var position = transform.position;
+            Vector3 newPos = new Vector3(0, player.transform.position.y + posY, position.z);
+            position = Vector3.Lerp(position, newPos, 2f);
+            transform.position = position;
         }
     }
     

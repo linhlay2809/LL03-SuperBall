@@ -17,7 +17,6 @@ public class ObstacleMain : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            GameManager.Instance.IsGameOver = true;
             GameManager.Instance.GameOver();
             col.GetComponent<Player>().GameOver();
             UIManager.Instance.GameOver();

@@ -29,12 +29,16 @@ public class PlayfabManager : MonoBehaviour
             {
                 GetPlayerProfile = true
             }
-        },resultCallback =>
+        }, async resultCallback =>
         {
             string name = null;
             if (resultCallback.InfoResultPayload.PlayerProfile != null)
             {
-                name = resultCallback.InfoResultPayload.PlayerProfile.DisplayName;
+                await Task.Run(() =>
+                {
+                    name = resultCallback.InfoResultPayload.PlayerProfile.DisplayName;
+                });
+                
             }
 
             if (name == null)
@@ -45,17 +49,18 @@ public class PlayfabManager : MonoBehaviour
             {
                 changeNameUI.SetActive(false);
             }
+
             Debug.Log("Login Success");
         }, error => Debug.LogError(error.GenerateErrorReport()));
         return Task.CompletedTask;
     }
-    public Task UpdateDisplayName(string name) {
+    public async Task UpdateDisplayName(string name) {
         PlayFabClientAPI.UpdateUserTitleDisplayName( new UpdateUserTitleDisplayNameRequest {
             DisplayName = name
         }, result => {
             Debug.Log("The player's display name is now: " + result.DisplayName);
         }, error => Debug.LogError(error.GenerateErrorReport()));
-        return Task.CompletedTask;
+        await Task.Yield();
     }
     
     public void SendLeaderboard(int score)
