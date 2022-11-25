@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleMain : MonoBehaviour
+namespace Target_Scripts
 {
-    [SerializeField] protected float speed;
-    [SerializeField] protected Vector2 minMaxSpeed;
-    [SerializeField] protected GameObject parent;
-    // Start is called before the first frame update
-    void Start()
+    public class ObstacleMain : MonoBehaviour
     {
-        parent = gameObject.transform.parent.gameObject;
-        speed = Random.Range(minMaxSpeed.x, minMaxSpeed.y); // Random speed cho Obstacle con
-    }
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.CompareTag("Player"))
+        [SerializeField] protected float speed;
+        [SerializeField] protected Vector2 minMaxSpeed;
+        [SerializeField] protected GameObject parent;
+        // Start is called before the first frame update
+        private void Start()
         {
-            GameManager.Instance.GameOver();
-            col.GetComponent<Player>().GameOver();
-            UIManager.Instance.GameOver();
+            parent = gameObject.transform.parent.gameObject;
+            speed = Random.Range(minMaxSpeed.x, minMaxSpeed.y); // Random speed cho Obstacle con
+        }
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.CompareTag("Player"))
+            {
+                GameManager.Instance.GameOver();
+                col.GetComponent<Player>().GameOver();
+                UIManager.Instance.GameOver();
+            }
         }
     }
 }

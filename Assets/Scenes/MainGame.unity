@@ -2135,8 +2135,8 @@ MonoBehaviour:
   target: {fileID: 0}
   triggerEffect: {fileID: 1626666137}
   deathEffect: {fileID: 3420766511826444808, guid: 83f5a0b6c45a45e4b959020f11469ac9, type: 3}
-  _speed: 10
-  _isActiveBall: 0
+  speed: 10
+  isActiveBall: 0
 --- !u!82 &1159507594
 AudioSource:
   m_ObjectHideFlags: 0

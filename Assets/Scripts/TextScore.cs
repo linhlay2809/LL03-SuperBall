@@ -8,10 +8,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TextScore : MonoBehaviour
 {
-    private TextMeshProUGUI textScore;
+    private TextMeshProUGUI _textScore;
     private void Awake()
     {
-        textScore = GetComponent<TextMeshProUGUI>();
+        _textScore = GetComponent<TextMeshProUGUI>();
     }
     private void Start()
     {
@@ -21,7 +21,7 @@ public class TextScore : MonoBehaviour
 
     private void AddScore(int score)
     {
-        textScore.text = score.ToString(); // Cập nhật score lên UI
+        _textScore.text = score.ToString(); // Cập nhật score lên UI
     }
 
    

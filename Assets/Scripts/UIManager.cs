@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ads;
+using Playfab;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
@@ -23,8 +25,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI highScoretxt;
     [SerializeField] protected TextMeshProUGUI finalHighScoretxt;
     [SerializeField] protected Player player;
-    private Animator anim;
-    private int currentHighScore;
+    private Animator _anim;
+    private int _currentHighScore;
+    
     /// <summary>
     /// Singleton
     /// </summary>
@@ -33,8 +36,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        player = GameObject.Find("Player").GetComponent<Player>();
-        anim = GetComponent<Animator>();
+        _anim = GetComponent<Animator>();
     }
     
     private async void Start()
@@ -52,7 +54,7 @@ public class UIManager : MonoBehaviour
     
     private async Task SetHighScore()
     {
-        await Task.Delay(1000);
+        await Task.Delay(1500);
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
             StatisticName = "Rank",
@@ -60,8 +62,8 @@ public class UIManager : MonoBehaviour
             MaxResultsCount = 1,
         }, resultCallback =>
         {
-            currentHighScore = resultCallback.Leaderboard[0].StatValue;
-            highScoretxt.SetText(currentHighScore.ToString());
+            _currentHighScore = resultCallback.Leaderboard[0].StatValue;
+            highScoretxt.SetText(_currentHighScore.ToString());
         }, errorCallback =>
         {
             Debug.Log(errorCallback.Error);
@@ -88,7 +90,7 @@ public class UIManager : MonoBehaviour
         }
 //#endif
     }
-    public void GameOver()
+    public async void GameOver()
     {
         int score;
         gameOverUI.SetActive(true);
@@ -96,16 +98,18 @@ public class UIManager : MonoBehaviour
         score = GameManager.Instance.GetScore();
         scoreFinaltxt.text = score.ToString();
         PlayfabManager.Instance.SendLeaderboard(score);
-        if (score > currentHighScore)
+        if (score > _currentHighScore)
         {
-            currentHighScore = score;
+            _currentHighScore = score;
         }
 
-        finalHighScoretxt.SetText(currentHighScore.ToString());
+        finalHighScoretxt.SetText(_currentHighScore.ToString());
+        await AdsManager.Instance.ShowAd();
+
     }
     // Active score animator when trigger target
     public void SetScoreAnim()
     {
-        anim.SetTrigger("Trigger");
+        _anim.SetTrigger("Trigger");
     }
 }

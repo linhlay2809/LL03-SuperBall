@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Target : MonoBehaviour
+namespace Target_Scripts
 {
-    [SerializeField] protected int score;
-
-    private void OnTriggerEnter2D(Collider2D col)
+    public class Target : MonoBehaviour
     {
-        if (col.CompareTag("Player"))
-        {
-            GameManager.Instance.AddScore(score);
-        }
+        [SerializeField] protected int score;
+
+        public int Score => score;
+    
     }
 }

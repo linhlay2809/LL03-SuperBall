@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Target_Scripts;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] protected TargetManager targetManager;
-    [SerializeField] protected GameObject target;
+    [SerializeField] protected Target target;
     [SerializeField] protected ParticleSystem triggerEffect;
     [SerializeField] protected GameObject deathEffect;
-    [SerializeField] protected float _speed;
-    [SerializeField] protected bool _isActiveBall = false;
+    [SerializeField] protected float speed = 10f;
+    [SerializeField] protected bool isActiveBall = false;
     
     private void Start()
     {
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _isActiveBall = true;
+                isActiveBall = true;
             }
 #else
             // Nhận diện thao tác chạm trên dt
@@ -37,13 +38,14 @@ public class Player : MonoBehaviour
             }
 #endif       
 
-            if (_isActiveBall)
+            if (isActiveBall)
             {
                 // Di chuyển player đến target
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
                 if (transform.position == target.transform.position)
                 {
-                    _isActiveBall = false;
+                    isActiveBall = false;
+                    GameManager.Instance.AddScore(target.Score);
                     AfterTriggerTarget();
                 }
             }
@@ -69,11 +71,10 @@ public class Player : MonoBehaviour
     {
         target = targetManager.GetTarget(newTarget);
     }
-    public async void GameOver()
+    public void GameOver()
     {
         GameObject deathEff = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
         Destroy(deathEff, 1);
         Destroy(gameObject);
-        await AdsManager.Instance.ShowAd();
     }
 }

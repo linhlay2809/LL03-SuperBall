@@ -8,9 +8,9 @@ public class ChangeColor : MonoBehaviour
 
     // to change the color every blank seconds 
     [SerializeField] protected float changeColorEvery;
-    protected float _colorstep;
+    private float _colorstep;
     [SerializeField] protected Color[] _colors;
-    protected int _i;
+    private int _i;
 
     // the starting color to lerp with
     private Color _lerpedColor;
