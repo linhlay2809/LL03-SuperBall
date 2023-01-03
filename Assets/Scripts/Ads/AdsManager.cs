@@ -36,7 +36,7 @@ namespace Ads
         void Start()
         {
             Advertisement.Initialize(GAME_ID, testMode,this);
-            LoadAd();
+            LoadRewardedAd();
         }
 
         public void LoadAd()
@@ -53,8 +53,9 @@ namespace Ads
             Advertisement.Load(REWARDED_VIDEO_PLACEMENT, this);
         }
 
-        public void ShowRewardedAd()
+        public async Task ShowRewardedAd()
         {
+            await Task.Delay(1000);
             Advertisement.Show(REWARDED_VIDEO_PLACEMENT, this);
         }
         public void ToggleBanner() 

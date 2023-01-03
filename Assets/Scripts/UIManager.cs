@@ -104,7 +104,7 @@ public class UIManager : MonoBehaviour
         }
 
         finalHighScoretxt.SetText(_currentHighScore.ToString());
-        await AdsManager.Instance.ShowAd();
+        await AdsManager.Instance.ShowRewardedAd();
 
     }
     // Active score animator when trigger target

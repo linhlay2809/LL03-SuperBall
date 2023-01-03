@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began) // Khi bắt đầu chạm
                 {
-                    _isActiveBall = true;
+                    isActiveBall = true;
                 }
             }
 #endif       

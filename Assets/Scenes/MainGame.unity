@@ -3942,7 +3942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bannerPosition: 4
-  testMode: 1
+  testMode: 0
 --- !u!4 &2075062672
 Transform:
   m_ObjectHideFlags: 0
