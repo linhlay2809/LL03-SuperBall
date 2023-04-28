@@ -555,6 +555,14 @@ namespace PlayFab.ServerModels
         public string CharacterType;
     }
 
+    public enum ChurnRiskLevel
+    {
+        NoData,
+        LowRisk,
+        MediumRisk,
+        HighRisk
+    }
+
     public enum CloudScriptRevisionOption
     {
         Live,
@@ -1355,19 +1363,8 @@ namespace PlayFab.ServerModels
         None,
         Steam,
         Facebook,
-        SteamOrFacebook,
         Xbox,
-        SteamOrXbox,
-        FacebookOrXbox,
-        SteamOrFacebookOrXbox,
         Psn,
-        SteamOrPsn,
-        FacebookOrPsn,
-        SteamOrFacebookOrPsn,
-        XboxOrPsn,
-        SteamOrXboxOrPsn,
-        FacebookOrXboxOrPsn,
-        SteamOrFacebookOrXboxOrPsn,
         All
     }
 
@@ -1985,9 +1982,21 @@ namespace PlayFab.ServerModels
         AutomationRuleAlreadyExists,
         AutomationRuleLimitExceeded,
         InvalidGooglePlayGamesServerAuthCode,
-        StorageAccountNotFound,
         PlayStreamConnectionFailed,
         InvalidEventContents,
+        InsightsV1Deprecated,
+        AnalysisSubscriptionNotFound,
+        AnalysisSubscriptionFailed,
+        AnalysisSubscriptionFoundAlready,
+        AnalysisSubscriptionManagementInvalidInput,
+        InvalidGameCenterId,
+        InvalidNintendoSwitchAccountId,
+        EntityAPIKeysNotSupported,
+        IpAddressBanned,
+        EntityLineageBanned,
+        NamespaceMismatch,
+        InvalidServiceConfiguration,
+        InvalidNamespaceMismatch,
         MatchmakingEntityInvalid,
         MatchmakingPlayerAttributesInvalid,
         MatchmakingQueueNotFound,
@@ -2116,6 +2125,7 @@ namespace PlayFab.ServerModels
         AsyncExportNotInFlight,
         AsyncExportNotFound,
         AsyncExportRateLimitExceeded,
+        AnalyticsSegmentCountOverLimit,
         SnapshotNotFound,
         InventoryApiNotImplemented,
         LobbyDoesNotExist,
@@ -2134,6 +2144,12 @@ namespace PlayFab.ServerModels
         EventSamplingInvalidEventNamespace,
         EventSamplingInvalidEventName,
         EventSamplingRatioNotFound,
+        TelemetryKeyNotFound,
+        TelemetryKeyInvalidName,
+        TelemetryKeyAlreadyExists,
+        TelemetryKeyInvalid,
+        TelemetryKeyCountOverLimit,
+        TelemetryKeyDeactivated,
         EventSinkConnectionInvalid,
         EventSinkConnectionUnauthorized,
         EventSinkRegionInvalid,
@@ -2315,11 +2331,6 @@ namespace PlayFab.ServerModels
     public class GetCharacterLeaderboardRequest : PlayFabRequestCommon
     {
         /// <summary>
-        /// Optional character type on which to filter the leaderboard entries.
-        /// </summary>
-        [Obsolete("No longer available", true)]
-        public string CharacterType;
-        /// <summary>
         /// Maximum number of entries to retrieve.
         /// </summary>
         public int MaxResultsCount;
@@ -2415,18 +2426,19 @@ namespace PlayFab.ServerModels
         /// </summary>
         public Dictionary<string,string> CustomTags;
         /// <summary>
-        /// Indicates which other platforms' friends should be included in the response.
+        /// Indicates which other platforms' friends should be included in the response. In HTTP, it is represented as a
+        /// comma-separated list of platforms.
         /// </summary>
         public ExternalFriendSources? ExternalPlatformFriends;
         /// <summary>
         /// Indicates whether Facebook friends should be included in the response. Default is true.
         /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", false)]
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
         public bool? IncludeFacebookFriends;
         /// <summary>
         /// Indicates whether Steam service friends should be included in the response. Default is true.
         /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", false)]
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
         public bool? IncludeSteamFriends;
         /// <summary>
         /// Maximum number of entries to retrieve.
@@ -2468,18 +2480,19 @@ namespace PlayFab.ServerModels
         /// </summary>
         public Dictionary<string,string> CustomTags;
         /// <summary>
-        /// Indicates which other platforms' friends should be included in the response.
+        /// Indicates which other platforms' friends should be included in the response. In HTTP, it is represented as a
+        /// comma-separated list of platforms.
         /// </summary>
         public ExternalFriendSources? ExternalPlatformFriends;
         /// <summary>
         /// Indicates whether Facebook friends should be included in the response. Default is true.
         /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", false)]
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
         public bool? IncludeFacebookFriends;
         /// <summary>
         /// Indicates whether Steam service friends should be included in the response. Default is true.
         /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", false)]
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
         public bool? IncludeSteamFriends;
         /// <summary>
         /// PlayFab identifier of the player whose friend list to get.
@@ -2519,11 +2532,6 @@ namespace PlayFab.ServerModels
         /// Unique PlayFab assigned ID for a specific character owned by a user
         /// </summary>
         public string CharacterId;
-        /// <summary>
-        /// Optional character type on which to filter the leaderboard entries.
-        /// </summary>
-        [Obsolete("No longer available", true)]
-        public string CharacterType;
         /// <summary>
         /// Maximum number of entries to retrieve.
         /// </summary>
@@ -2912,7 +2920,7 @@ namespace PlayFab.ServerModels
         public uint? MaxBatchSize;
         /// <summary>
         /// Number of seconds to keep the continuation token active. After token expiration it is not possible to continue paging
-        /// results. Default is 300 (5 minutes). Maximum is 1,800 (30 minutes).
+        /// results. Default is 300 (5 minutes). Maximum is 5,400 (90 minutes).
         /// </summary>
         public uint? SecondsToLive;
         /// <summary>
@@ -4101,6 +4109,32 @@ namespace PlayFab.ServerModels
     }
 
     [Serializable]
+    public class LinkSteamIdRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+        /// </summary>
+        public Dictionary<string,string> CustomTags;
+        /// <summary>
+        /// If another user is already linked to the account, unlink the other user and re-link.
+        /// </summary>
+        public bool? ForceLink;
+        /// <summary>
+        /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the Xbox Live identifier.
+        /// </summary>
+        public string PlayFabId;
+        /// <summary>
+        /// Unique Steam identifier for a user.
+        /// </summary>
+        public string SteamId;
+    }
+
+    [Serializable]
+    public class LinkSteamIdResult : PlayFabResultCommon
+    {
+    }
+
+    [Serializable]
     public class LinkXboxAccountRequest : PlayFabRequestCommon
     {
         /// <summary>
@@ -4263,7 +4297,7 @@ namespace PlayFab.ServerModels
         /// </summary>
         public GetPlayerCombinedInfoRequestParams InfoRequestParameters;
         /// <summary>
-        /// Unique Steam identifier for a user
+        /// Unique Steam identifier for a user.
         /// </summary>
         public string SteamId;
     }
@@ -4294,7 +4328,7 @@ namespace PlayFab.ServerModels
         /// </summary>
         public string Sandbox;
         /// <summary>
-        /// Unique Xbox identifier for a user
+        /// Unique Xbox identifier for a user.
         /// </summary>
         public string XboxId;
     }
@@ -4669,6 +4703,10 @@ namespace PlayFab.ServerModels
         /// Banned until UTC Date. If permanent ban this is set for 20 years after the original ban date.
         /// </summary>
         public DateTime? BannedUntil;
+        /// <summary>
+        /// The prediction of the player to churn within the next seven days.
+        /// </summary>
+        public ChurnRiskLevel? ChurnPrediction;
         /// <summary>
         /// Array of contact email addresses associated with the player
         /// </summary>
@@ -6226,6 +6264,24 @@ namespace PlayFab.ServerModels
 
     [Serializable]
     public class UnlinkServerCustomIdResult : PlayFabResultCommon
+    {
+    }
+
+    [Serializable]
+    public class UnlinkSteamIdRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+        /// </summary>
+        public Dictionary<string,string> CustomTags;
+        /// <summary>
+        /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the Steam account.
+        /// </summary>
+        public string PlayFabId;
+    }
+
+    [Serializable]
+    public class UnlinkSteamIdResult : PlayFabResultCommon
     {
     }
 

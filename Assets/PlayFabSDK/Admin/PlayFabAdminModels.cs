@@ -565,6 +565,19 @@ namespace PlayFab.AdminModels
         public int Amount;
     }
 
+    [Serializable]
+    public class ChurnPredictionSegmentFilter : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Comparison
+        /// </summary>
+        public SegmentFilterComparison? Comparison;
+        /// <summary>
+        /// RiskLevel
+        /// </summary>
+        public ChurnRiskLevel? RiskLevel;
+    }
+
     public enum ChurnRiskLevel
     {
         NoData,
@@ -2393,9 +2406,21 @@ namespace PlayFab.AdminModels
         AutomationRuleAlreadyExists,
         AutomationRuleLimitExceeded,
         InvalidGooglePlayGamesServerAuthCode,
-        StorageAccountNotFound,
         PlayStreamConnectionFailed,
         InvalidEventContents,
+        InsightsV1Deprecated,
+        AnalysisSubscriptionNotFound,
+        AnalysisSubscriptionFailed,
+        AnalysisSubscriptionFoundAlready,
+        AnalysisSubscriptionManagementInvalidInput,
+        InvalidGameCenterId,
+        InvalidNintendoSwitchAccountId,
+        EntityAPIKeysNotSupported,
+        IpAddressBanned,
+        EntityLineageBanned,
+        NamespaceMismatch,
+        InvalidServiceConfiguration,
+        InvalidNamespaceMismatch,
         MatchmakingEntityInvalid,
         MatchmakingPlayerAttributesInvalid,
         MatchmakingQueueNotFound,
@@ -2524,6 +2549,7 @@ namespace PlayFab.AdminModels
         AsyncExportNotInFlight,
         AsyncExportNotFound,
         AsyncExportRateLimitExceeded,
+        AnalyticsSegmentCountOverLimit,
         SnapshotNotFound,
         InventoryApiNotImplemented,
         LobbyDoesNotExist,
@@ -2542,6 +2568,12 @@ namespace PlayFab.AdminModels
         EventSamplingInvalidEventNamespace,
         EventSamplingInvalidEventName,
         EventSamplingRatioNotFound,
+        TelemetryKeyNotFound,
+        TelemetryKeyInvalidName,
+        TelemetryKeyAlreadyExists,
+        TelemetryKeyInvalid,
+        TelemetryKeyCountOverLimit,
+        TelemetryKeyDeactivated,
         EventSinkConnectionInvalid,
         EventSinkConnectionUnauthorized,
         EventSinkRegionInvalid,
@@ -3010,7 +3042,7 @@ namespace PlayFab.AdminModels
         public uint? MaxBatchSize;
         /// <summary>
         /// Number of seconds to keep the continuation token active. After token expiration it is not possible to continue paging
-        /// results. Default is 300 (5 minutes). Maximum is 1,800 (30 minutes).
+        /// results. Default is 300 (5 minutes). Maximum is 5,400 (90 minutes).
         /// </summary>
         public uint? SecondsToLive;
         /// <summary>
@@ -4385,6 +4417,10 @@ namespace PlayFab.AdminModels
         /// </summary>
         public DateTime? BannedUntil;
         /// <summary>
+        /// The prediction of the player to churn within the next seven days.
+        /// </summary>
+        public ChurnRiskLevel? ChurnPrediction;
+        /// <summary>
         /// Array of contact email addresses associated with the player
         /// </summary>
         public List<ContactEmailInfo> ContactEmailAddresses;
@@ -5229,6 +5265,10 @@ namespace PlayFab.AdminModels
         /// </summary>
         public AllPlayersSegmentFilter AllPlayersFilter;
         /// <summary>
+        /// Filter property for player churn risk level.
+        /// </summary>
+        public ChurnPredictionSegmentFilter ChurnPredictionFilter;
+        /// <summary>
         /// Filter property for first login date.
         /// </summary>
         public FirstLoginDateSegmentFilter FirstLoginDateFilter;
@@ -6002,11 +6042,8 @@ namespace PlayFab.AdminModels
     }
 
     /// <summary>
-    /// This API method is designed to store title specific values which can be read by the client. For example, a developer
-    /// could choose to store values which modify the user experience, such as enemy spawn rates, weapon strengths, movement
-    /// speeds, etc. This allows a developer to update the title without the need to create, test, and ship a new build. This
-    /// operation is additive. If a Key does not exist in the current dataset, it will be added with the specified Value. If it
-    /// already exists, the Value for that key will be overwritten with the new Value.
+    /// This operation is additive. If a Key does not exist in the current dataset, it will be added with the specified Value.
+    /// If it already exists, the Value for that key will be overwritten with the new Value.
     /// </summary>
     [Serializable]
     public class SetTitleDataRequest : PlayFabRequestCommon
